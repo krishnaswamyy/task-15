@@ -1,0 +1,44 @@
+Dataset Loaded Successfully
+   Age   Race Marital Status T Stage  N Stage 6th Stage  \
+0   68  White        Married       T1      N1       IIA   
+1   50  White        Married       T2      N2      IIIA   
+2   58  White       Divorced       T3      N3      IIIC   
+3   58  White        Married       T1      N1       IIA   
+4   47  White        Married       T2      N1       IIB   
+
+               differentiate Grade   A Stage  Tumor Size Estrogen Status  \
+0      Poorly differentiated     3  Regional           4        Positive   
+1  Moderately differentiated     2  Regional          35        Positive   
+2  Moderately differentiated     2  Regional          63        Positive   
+3      Poorly differentiated     3  Regional          18        Positive   
+4      Poorly differentiated     3  Regional          41        Positive   
+
+  Progesterone Status  Regional Node Examined  Reginol Node Positive  \
+0            Positive                      24                      1   
+1            Positive                      14                      5   
+2            Positive                      14                      7   
+3            Positive                       2                      1   
+4            Positive                       3                      1   
+
+   Survival Months Status  
+0               60  Alive  
+1               62  Alive  
+2               75  Alive  
+3               84  Alive  
+4               50  Alive  
+
+Model Accuracy: 0.8944099378881988
+
+Classification Report:
+
+              precision    recall  f1-score   support
+
+       Alive       0.91      0.97      0.94       682
+        Dead       0.76      0.46      0.57       123
+
+    accuracy                           0.89       805
+   macro avg       0.83      0.71      0.75       805
+weighted avg       0.89      0.89      0.88       805
+
+
+Pipeline saved successfully as ml_pipeline_custom.pkl
