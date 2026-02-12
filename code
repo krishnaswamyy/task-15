@@ -1,0 +1,89 @@
+# ============================================
+# END-TO-END ML PIPELINE (CUSTOM CSV DATASET)
+# ============================================
+
+# 1. Import Libraries
+import pandas as pd
+import joblib
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+# --------------------------------------------
+# 2. Load Dataset
+# --------------------------------------------
+df = pd.read_csv(r"/content/Breast_Cancer.csv")
+
+print("Dataset Loaded Successfully")
+print(df.head())
+
+# --------------------------------------------
+# 3. Define Target Column
+# (Your dataset uses 'Status')
+# --------------------------------------------
+y = df["Status"]        # Target column
+X = df.drop("Status", axis=1)
+
+# --------------------------------------------
+# 4. Identify Numerical & Categorical Columns
+# --------------------------------------------
+numeric_features = X.select_dtypes(include=["int64", "float64"]).columns
+categorical_features = X.select_dtypes(include=["object"]).columns
+
+# --------------------------------------------
+# 5. Create Preprocessing Pipeline
+# --------------------------------------------
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", StandardScaler(), numeric_features),
+        ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
+    ]
+)
+
+# --------------------------------------------
+# 6. Create Full ML Pipeline
+# --------------------------------------------
+pipeline = Pipeline(
+    steps=[
+        ("preprocessing", preprocessor),
+        ("model", LogisticRegression(max_iter=2000))
+    ]
+)
+
+# --------------------------------------------
+# 7. Train-Test Split
+# --------------------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+# --------------------------------------------
+# 8. Train Model
+# --------------------------------------------
+pipeline.fit(X_train, y_train)
+
+# --------------------------------------------
+# 9. Predictions
+# --------------------------------------------
+y_pred = pipeline.predict(X_test)
+
+# --------------------------------------------
+# 10. Evaluation
+# --------------------------------------------
+print("\nModel Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:\n")
+print(classification_report(y_test, y_pred))
+
+# --------------------------------------------
+# 11. Save Pipeline
+# --------------------------------------------
+joblib.dump(pipeline, "ml_pipeline_custom.pkl")
+
+print("\nPipeline saved successfully as ml_pipeline_custom.pkl")
